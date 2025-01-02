@@ -5,5 +5,5 @@ enum class Cereal(val local: String) {
     RICE("Рис"),
     MILLET("Пшено"),
     PEAS("Горох"),
-    BULGUR("Булгур")
+    BULGUR("Булгур");
 }
