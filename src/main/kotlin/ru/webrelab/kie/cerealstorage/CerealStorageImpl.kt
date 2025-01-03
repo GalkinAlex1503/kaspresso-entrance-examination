@@ -1,5 +1,6 @@
 package ru.webrelab.kie.cerealstorage
 
+import kotlin.math.abs
 import kotlin.math.min
 
 
@@ -13,6 +14,9 @@ class CerealStorageImpl(
     init {
         require(containerCapacity >= 0) {
             "Ёмкость контейнера не может быть отрицательной"
+        }
+        require(containerCapacity >= 0) {
+            "Ёмкость хранилища не может быть отрицательной"
         }
         require(storageCapacity >= containerCapacity) {
             "Ёмкость хранилища не должна быть меньше ёмкости одного контейнера"
@@ -37,7 +41,9 @@ class CerealStorageImpl(
         require(amount >= 0) {
             "Количество крупы не может быть отрицательным"
         }
-
+        require(storage.contains(cereal)) {
+            "Крупа этого типа отстутсвует в хранилище"
+        }
         val current = getAmount(cereal)
         return if (current >= amount) {
             storage[cereal] = current - amount
@@ -49,7 +55,11 @@ class CerealStorageImpl(
     }
 
     override fun removeContainer(cereal: Cereal): Boolean {
-        return if (storage[cereal] == 0f) {
+        require(storage.contains(cereal)) {
+            "Крупа этого типа отстутсвует в хранилище"
+        }
+        val epsilon = 0.01f // допустимая погрешность
+        return if ( abs((storage[cereal] ?: 0f) - 0f) <= epsilon   ) {
             storage.remove(cereal)
             true
         } else {
@@ -58,6 +68,9 @@ class CerealStorageImpl(
     }
 
     override fun getAmount(cereal: Cereal): Float {
+        require(storage.contains(cereal)) {
+            "Крупа этого типа отстутсвует в хранилище"
+        }
         return storage.getOrDefault(cereal, 0f)
     }
 
